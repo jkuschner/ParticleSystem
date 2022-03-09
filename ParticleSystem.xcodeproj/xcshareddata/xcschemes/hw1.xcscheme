@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "79F44D48276BA44B009E3C5C"
                BuildableName = "hw1"
-               BlueprintName = "hw1"
-               ReferencedContainer = "container:hw1.xcodeproj">
+               BlueprintName = "ParticleSystem"
+               ReferencedContainer = "container:ParticleSystem.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,8 +47,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "79F44D48276BA44B009E3C5C"
             BuildableName = "hw1"
-            BlueprintName = "hw1"
-            ReferencedContainer = "container:hw1.xcodeproj">
+            BlueprintName = "ParticleSystem"
+            ReferencedContainer = "container:ParticleSystem.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -64,8 +64,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "79F44D48276BA44B009E3C5C"
             BuildableName = "hw1"
-            BlueprintName = "hw1"
-            ReferencedContainer = "container:hw1.xcodeproj">
+            BlueprintName = "ParticleSystem"
+            ReferencedContainer = "container:ParticleSystem.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
