@@ -52,11 +52,17 @@ struct Particle {
 
 
         void updatePosition(float timestep) {
-            // Verlet w/ no collision detection and no oversampling
+            /*
             glm::vec3 position_new = 2.0f * position - position_prev;
             position_new += acceleration() * timestep * timestep;
             position_prev = position;
             position = position_new;
+            */
+
+            // Euler integration
+            velocity += acceleration() * timestep;
+            position_prev = position;
+            position += velocity * timestep;
 
             lifetime--;
 
@@ -113,7 +119,7 @@ public:
     float friction_coff; //collision friction
 
     void addParticle();
-    std::vector<std::string> update();
+    void update();
     std::vector<Cube*> sprites();
 
     Spawner();
