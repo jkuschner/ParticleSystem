@@ -16,6 +16,8 @@ public:
     glm::vec3 position;
 
     explicit Cube(const std::string& name, const glm::vec3& cubeMin, const glm::vec3& cubeMax) : Mesh(name) {
+        
+        matrix_world = glm::mat4(1);
         position = cubeMin;
 
         verts = {
@@ -74,26 +76,37 @@ public:
 
     }
     
-    void update(glm::vec3 newPos) final {
-        matrix_world = glm::rotate(glm::mat4(1), glm::radians(1.f), glm::vec3(0.0f, 1.0f, 0.0f)) * matrix_world;
+    void update(glm::vec3 newPos) {
+        //matrix_world = glm::rotate(glm::mat4(1), glm::radians(1.f), glm::vec3(0.0f, 1.0f, 0.0f)) * matrix_world;
 
         position = newPos;
         glm::vec3 tmpMax = position + glm::vec3(CUBE_SIZE);
 
-        verts[0] = glm::vec4(tmpMax.x, tmpMax.y, position.z, 1);
-        verts[1] = glm::vec4(tmpMax.x, position.y, position.z, 1);
-        verts[2] = glm::vec4(tmpMax.x, tmpMax.y, tmpMax.z, 1);
-        verts[3] = glm::vec4(tmpMax.x, position.y, position.z, 1);
-        verts[4] = glm::vec4(position.x, tmpMax.y, position.z, 1);
-        verts[5] = glm::vec4(position.x, position.y, position.z, 1);
-        verts[6] = glm::vec4(position.x, tmpMax.y, tmpMax.z, 1);
-        verts[7] = glm::vec4(position.x, position.y, tmpMax.z, 1);
+        verts[0]->position = glm::vec4(tmpMax.x, tmpMax.y, position.z, 1);
+        verts[1]->position = glm::vec4(tmpMax.x, position.y, position.z, 1);
+        verts[2]->position = glm::vec4(tmpMax.x, tmpMax.y, tmpMax.z, 1);
+        verts[3]->position = glm::vec4(tmpMax.x, position.y, tmpMax.z, 1);
+        verts[4]->position = glm::vec4(position.x, tmpMax.y, position.z, 1);
+        verts[5]->position = glm::vec4(position.x, position.y, position.z, 1);
+        verts[6]->position = glm::vec4(position.x, tmpMax.y, tmpMax.z, 1);
+        verts[7]->position = glm::vec4(position.x, position.y, tmpMax.z, 1);
+        
+        GLuints indices = {
+            5, 3, 1,    3, 8, 4,
+            7, 6, 8,    2, 8, 6,
+            1, 4, 2,    5, 2, 6,
+            5, 7, 3,    3, 7, 8,
+            7, 5, 6,    2, 4, 8,
+            1, 3, 4,    5, 1, 2
+        };
 
+        /*
         for (size_t i = 0; i < indices.size(); i+=3) {
             faces[i]->v1 = verts[indices[i] - 1];
             faces[i]->v2 = verts[indices[i+1] - 1];
             faces[i]->v3 = verts[indices[i+2] - 1];
         }
+         */
 
         vec4s _verts;
         for(size_t i = 0; i < faces.size(); ++i) {

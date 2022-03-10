@@ -1,6 +1,8 @@
 #include "Spawner.hpp"
 #include <stdlib.h>
 
+ull Spawner::particlesCreated = 0;
+
 void Spawner::addParticle() {
     // uniform randomness
     glm::vec3 randPos, randVel;
@@ -13,7 +15,7 @@ void Spawner::addParticle() {
     randVel.x = float((rand() % int(velocityVar.x))) + initVelocity.x - (velocityVar.x / 2);
     randVel.y = float((rand() % int(velocityVar.y))) + initVelocity.y - (velocityVar.y / 2);
     randVel.z = float((rand() % int(velocityVar.z))) + initVelocity.z - (velocityVar.z / 2);
-    randLife = int(float(rand() % int(lifespanVar))) + initLifeSpan - (lifespanVar / 2));
+    randLife = int(float((rand() % int(lifespanVar))) + initLifespan - (lifespanVar / 2));
 
     Particle* p = new Particle(randPos, randVel, MASS, randLife, particlesCreated);
     particles.push_back(p);
@@ -26,11 +28,11 @@ std::vector<std::string> Spawner::update() {
     std::vector<Particle*>::iterator tmpit;
 
     std::vector<std::string> deleteIds;
-    while(it != particles.end())
+    while(it != particles.end()) {
         tmpit = it;
         it++;
-        if(tmpit->lifetime <= 0) {
-            deleteIds.push_back(tmpit->sprite->name);
+        if((*tmpit)->lifetime <= 0) {
+            deleteIds.push_back((*tmpit)->sprite->name);
             particles.erase(tmpit);
         }
     }
@@ -47,7 +49,7 @@ std::vector<std::string> Spawner::update() {
     }
 
     // apply drag force
-    for(int i = 0; i < triangles.size(); i++) {
+    for(int i = 0; i < particles.size(); i++) {
         // drag calculation based on spherical/cubic particles
     }
     
@@ -68,15 +70,15 @@ std::vector<std::string> Spawner::update() {
 }
 
 Spawner::Spawner() {
-    initPosition = glm::vec3(0f);
-    positionVar = glm::vec3(1f);
-    initVelcoity = glm::vec3(0f, 15f, 0f);
-    velocityVar = glm::vec3(0.5f, 2f, 0.5f);
-    gravity = glm::vec3(0f, -9.8f, 0f);
+    initPosition = glm::vec3(0.0f);
+    positionVar = glm::vec3(1.0f);
+    initVelocity = glm::vec3(0.0f, 20.0f, 0.0f);
+    velocityVar = glm::vec3(1.5f, 2.0f, 1.5f);
+    gravity = glm::vec3(0.0f, -20.8f, 0.0f);
     creationRate = 10;
-    initLifeSpan = 200;
-    lifespanVar = 10f;
-    roundOff = 0f;
+    initLifespan = 50;
+    lifespanVar = 10.0f;
+    roundOff = 0.0f;
     air_density = AIR_DENSITY;
     drag_coff = DRAG_COFF;
     particle_radius = 0.1f;
@@ -84,11 +86,13 @@ Spawner::Spawner() {
     friction_coff = FRICTION_COFF;
 }
 
-std::vector<Cube*> sprites() {
+std::vector<Cube*> Spawner::sprites() {
     std::vector<Cube*> sprites;
     sprites.reserve(particles.size());
     std::vector<Particle*>::iterator it;
     for (it = particles.begin(); it != particles.end(); ++it) {
-        sprites.push_back(it->sprite);
+        sprites.push_back((*it)->sprite);
     }
+    
+    return sprites;
 }

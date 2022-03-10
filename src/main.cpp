@@ -70,10 +70,11 @@ void display_callback() {
 void idle_callback() {
     // MARK: Perform any background tasks here
     // CALL glutPostRedisplay() if the work changes what's displayed on screen
-    spawner.update();
+    spawner->update();
     scene->objects.clear();
-    for (const Cube& cube : spawner->sprites()) {
-        scene->objects.emplace(cube.name, cube);
+
+    for (Cube* cube : spawner->sprites()) {
+        scene->objects[cube->name] = cube;
     }
 
     /*
