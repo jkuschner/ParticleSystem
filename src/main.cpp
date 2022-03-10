@@ -8,6 +8,7 @@
 #include <Cube.hpp>
 #include "Scene.hpp"
 #include "Shader.hpp"
+#include "Spawner.hpp"
 #include "core.hpp"
 #include "utils.hpp"
 
@@ -20,6 +21,7 @@ int mouseX = 0, mouseY = 0;
 bool wireframe_mode = false;
 
 Scene* scene;
+Spawner* spawner;
 std::map<std::string, Shader*> shaders;
 
 
@@ -38,7 +40,7 @@ void initialize() {
     */
 
     scene = new Scene("Scene");
-    scene->objects.insert(std::make_pair("Cube", new Cube("Cube", glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1))));
+    spawner = new Spawner();
 }
 
 
@@ -68,9 +70,17 @@ void display_callback() {
 void idle_callback() {
     // MARK: Perform any background tasks here
     // CALL glutPostRedisplay() if the work changes what's displayed on screen
+    spawner.update();
+    scene->objects.clear();
+    for (const Cube& cube : spawner->sprites()) {
+        scene->objects.emplace(cube.name, cube);
+    }
+
+    /*
     for (const auto& object: scene->objects) {
         object.second->update();
     }
+    */
     glutPostRedisplay();
 }
 

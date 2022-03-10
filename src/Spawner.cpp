@@ -1,92 +1,94 @@
 #include "Spawner.hpp"
+#include <stdlib.h>
 
 void Spawner::addParticle() {
-    Particle* p = new Particle()
-    // how to generate randomness?
+    // uniform randomness
+    glm::vec3 randPos, randVel;
+    GLuint randLife;
+    
+    srand(time(0));
+    randPos.x = float((rand() % int(positionVar.x))) + initPosition.x - (positionVar.x / 2);
+    randPos.y = float((rand() % int(positionVar.y))) + initPosition.y - (positionVar.y / 2);
+    randPos.z = float((rand() % int(positionVar.z))) + initPosition.z - (positionVar.z / 2);
+    randVel.x = float((rand() % int(velocityVar.x))) + initVelocity.x - (velocityVar.x / 2);
+    randVel.y = float((rand() % int(velocityVar.y))) + initVelocity.y - (velocityVar.y / 2);
+    randVel.z = float((rand() % int(velocityVar.z))) + initVelocity.z - (velocityVar.z / 2);
+    randLife = int(float(rand() % int(lifespanVar))) + initLifeSpan - (lifespanVar / 2));
+
+    Particle* p = new Particle(randPos, randVel, MASS, randLife, particlesCreated);
+    particles.push_back(p);
+    particlesCreated++;
 }
 
-void Cloth::update(glm::vec3 windSpeed) {
+std::vector<std::string> Spawner::update() {
+    // delete dead particles
+    std::vector<Particle*>::iterator it = particles.begin();
+    std::vector<Particle*>::iterator tmpit;
+
+    std::vector<std::string> deleteIds;
+    while(it != particles.end())
+        tmpit = it;
+        it++;
+        if(tmpit->lifetime <= 0) {
+            deleteIds.push_back(tmpit->sprite->name);
+            particles.erase(tmpit);
+        }
+    }
+
     // zero out forces
     for(int i = 0; i < particles.size(); i++) {
-        for(int j = 0; j < particles[0].size(); j++) {
-            particles[i][j]->force = glm::vec3(0);
-        }
+        particles[i]->force = glm::vec3(0);
     }
 
     // Apply all forces
     // apply gravity to all particles
-    glm::vec3 gravity = glm::vec3(0, GRAVITY, 0);
     for(int i = 0; i < particles.size(); i++) {
-        for(int j = 0; j < particles[0].size(); j++) {
-            particles[i][j]->force += gravity;
-        }
-    }
-
-    // apply springdamper force
-    for(int i = 0; i < springDampers.size(); i++) {
-        springDampers[i]->computeForce();
+        particles[i]->force += gravity;
     }
 
     // apply drag force
     for(int i = 0; i < triangles.size(); i++) {
-        triangles[i]->calcVelocity(windSpeed);
-        triangles[i]->computeForce();
+        // drag calculation based on spherical/cubic particles
     }
     
     // Integrate motion
     for(int i = 0; i < particles.size(); i++) {
-        for(int j = 0; j < particles[0].size(); j++) {
-            if(particles[i][j]->isFixed == false)
-                particles[i][j]->updatePosition(TIME_STEP);
-        }
+        particles[i]->updatePosition(TIME_STEP);
     }
 
-    // zero out particle normals
-    for(int i = 0; i < particles.size(); i++) {
-        for(int j = 0; j < particles[0].size(); j++) {
-            if(particles[i][j]->isFixed == false)
-                particles[i][j]->normal = glm::vec3(0);
-        }
+    // Create new particles
+    float num = TIME_STEP * creationRate + roundOff;
+    int newParticles = int(num);
+    roundOff = num - float(newParticles);
+    for(int i = 0; i < newParticles; i++) {
+        addParticle();
     }
 
-    //Loop through all triangles and add the triangle normal to the normal of each of the three particles it connects
-    for(int i = 0; i < triangles.size(); i++) {
-        triangles[i]->calcNormal();
-        triangles[i]->p1->normal += triangles[i]->normal;
-        triangles[i]->p2->normal += triangles[i]->normal;
-        triangles[i]->p3->normal += triangles[i]->normal;
+    return deleteIds;
+}
+
+Spawner::Spawner() {
+    initPosition = glm::vec3(0f);
+    positionVar = glm::vec3(1f);
+    initVelcoity = glm::vec3(0f, 15f, 0f);
+    velocityVar = glm::vec3(0.5f, 2f, 0.5f);
+    gravity = glm::vec3(0f, -9.8f, 0f);
+    creationRate = 10;
+    initLifeSpan = 200;
+    lifespanVar = 10f;
+    roundOff = 0f;
+    air_density = AIR_DENSITY;
+    drag_coff = DRAG_COFF;
+    particle_radius = 0.1f;
+    restitution = RESTITUTION;
+    friction_coff = FRICTION_COFF;
+}
+
+std::vector<Cube*> sprites() {
+    std::vector<Cube*> sprites;
+    sprites.reserve(particles.size());
+    std::vector<Particle*>::iterator it;
+    for (it = particles.begin(); it != particles.end(); ++it) {
+        sprites.push_back(it->sprite);
     }
-
-    //Loop through all the particles again and normalize the normal
-    for(int i = 0; i < particles.size(); i++) {
-        for(int j = 0; j < particles[0].size(); j++) {
-            glm::normalize(particles[i][j]->normal);
-        }
-    }
-
-    vec4s positions;
-    vec4s normals;
-    positions.reserve(verts.size());
-    normals.reserve(verts.size());
-
-    for(int i = 0; i < particles.size(); i++) {
-        for(int j = 0; j < particles[0].size(); j++) {
-            positions.push_back(glm::vec4(particles[i][j]->position, 1));
-            normals.push_back(glm::vec4(particles[i][j]->normal, 0));
-        }
-    }
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-    glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(glm::vec4), positions.data(), GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec4), normals.data(), GL_STATIC_DRAW);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-    glBindVertexArray(0);
 }

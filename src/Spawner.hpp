@@ -1,8 +1,9 @@
 #pragma once
-#define Cloth_hpp
+#define Spawner_hpp
 
 #include "core.hpp"
 #include "Mesh.hpp"
+#include "Cube.hpp"
 
 #define SQRT2 1.41421356237f
 #define DEFAULT_NORMAL glm::vec3(0, 1, 0)
@@ -10,19 +11,18 @@
 #define PARTICLE_SPACING 0.2f
 #define INITIAL_HEIGHT 1.7f
 
-#define TIME_STEP 0.01f
+#define TIME_STEP 0.016666667f
 
-#define DEFAULT_SPRING_CONSTANT 1200.0f
-#define DEFAULT_DAMPING_CONSTANT 4.0f
 #define GRAVITY -9.8f
 #define MASS 0.5f
 
 #define AIR_DENSITY 1.225f
 #define DRAG_COFF 1.28f
-#define DEFAULT_WIND_SPEED glm::vec3(0, 0, 20.0f)
 
 #define RESTITUTION 0.05f
 #define FRICTION_COFF 0.5f
+
+typedef unsigned long long int ull;
 
 struct Particle {
     glm::vec3 position;
@@ -31,14 +31,15 @@ struct Particle {
     glm::vec3 force;
     float     mass;
     GLuint lifetime;
-    GLuint particleID;
+    Cube* sprite;
+    ull particleID;
 
     public:
         glm::vec3 acceleration() { return (1 / mass) * force; }
         glm::vec3 momentum()     { return mass * velocity; }
         //void applyForce(glm::vec3 &f) { force += f;}
 
-        Particle(glm::vec3 pos, glm::vec3 v, float m, GLuint life, GLuint id) {
+        Particle(glm::vec3 pos, glm::vec3 v, float m, GLuint life, ull id) {
             position = pos;
             position_prev = pos;
             velocity = v;
@@ -46,6 +47,7 @@ struct Particle {
             mass = m;
             lifetime = life;
             particleID = id;
+            sprite = new Cube(std::to_string(id), pos, pos + glm::vec3(CUBE_SIZE));
         }
 
 
@@ -84,6 +86,8 @@ struct Particle {
             } else {
                 velocity += acceleration() * timestep;
             }
+
+            sprite->update(position);
         }
 };
 
@@ -91,14 +95,17 @@ class Spawner {
 private:
     std::vector<Particle*> particles;
 public:
-    GLuint creationRate; // particles per second
+    static ull particlesCreated;
+
     glm::vec3 initPosition;
     glm::vec3 positionVar;
     glm::vec3 initVelocity;
     glm::vec3 velocityVar;
+    glm::vec3 gravity;
+    GLuint creationRate; // particles per second
     GLuint initLifespan;
-    float LifespanVar;
-    float gravity;
+    float lifespanVar;
+    float roundOff;
     float air_density;
     float drag_coff;
     float particle_radius;
@@ -106,5 +113,8 @@ public:
     float friction_coff; //collision friction
 
     void addParticle();
-    void update();
+    std::vector<std::string> update();
+    std::vector<Cube*> sprites();
+
+    Spawner();
 };
