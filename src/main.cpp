@@ -11,6 +11,9 @@
 #include "Spawner.hpp"
 #include "core.hpp"
 #include "utils.hpp"
+#include "imgui.h"
+#include "imgui_impl_glut.h"
+#include "imgui_impl_opengl3.h"
 
 const int width = 800;
 const int height = 600;
@@ -24,6 +27,18 @@ Scene* scene;
 Spawner* spawner;
 std::map<std::string, Shader*> shaders;
 
+// adjustable parameters
+float iPos_x, iPos_y, iPos_z;
+float vPos_x, vPos_y, vPos_z;
+float iVel_x, iVel_y, iVel_z;
+float vVel_x, vVel_y, vVel_z;
+float grav;
+float spawnRate;
+GLuint iLifespan;
+float vLifespan;
+float air, drag, particle_size, rest, fric;
+
+static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 void initialize() {
     glClearColor(0.0f, 0.0f, 0.0f, 1);
@@ -41,6 +56,8 @@ void initialize() {
 
     scene = new Scene("Scene");
     spawner = new Spawner();
+
+
 }
 
 
@@ -61,6 +78,25 @@ void display_callback() {
     // Draw the grid
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     scene->drawGrid(shaders["Grid"]);
+
+    /*
+    // set up and render ImGui window
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGLUT_NewFrame();
+
+    //display code
+    ImGui::Begin("System Parameters");
+    ImGui::Text("text text hello");
+    ImGui::End();
+
+    // Rendering
+    ImGui::Render();
+    ImGuiIO& io = ImGui::GetIO();
+    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
+    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    */
 
     glutSwapBuffers();
 }
@@ -173,6 +209,8 @@ int main(int argc, char * argv[]) {
 
     /// see link: https://www.opengl.org/resources/libraries/glut/spec3/node46.html
     glutDisplayFunc(display_callback);
+    //ImGui stuff goes here
+
     glutIdleFunc(idle_callback);
     glutKeyboardFunc(handle_keypress);
     glutMouseFunc(handle_mouse_click);

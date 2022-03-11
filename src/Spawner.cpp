@@ -19,6 +19,10 @@ void Spawner::addParticle() {
     lo = initPosition.y - positionVar.y / 2;
     hi = initPosition.y + positionVar.y / 2;
     randPos.y = lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo)));
+    // ensure that particle spawns above ground
+    if (randPos.y <= 0.0f) {
+        randPos.y = 0.1f;
+    }
 
     lo = initPosition.z - positionVar.z / 2;
     hi = initPosition.z + positionVar.z / 2;

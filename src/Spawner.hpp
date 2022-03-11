@@ -19,8 +19,8 @@
 #define AIR_DENSITY 1.225f
 #define DRAG_COFF 1.28f
 
-#define RESTITUTION 0.05f
-#define FRICTION_COFF 0.5f
+#define RESTITUTION 0.55f
+#define FRICTION_COFF 0.1f
 
 typedef unsigned long long int ull;
 
