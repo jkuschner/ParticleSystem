@@ -69,20 +69,16 @@ void Spawner::update() {
         particles.erase(particles.begin());
     }
 
-    // zero out forces
-    for(int i = 0; i < particles.size(); i++) {
-        particles[i]->force = glm::vec3(0);
-    }
-
     // Apply all forces
-    // apply gravity to all particles
+    glm::vec3 drag;
     for(int i = 0; i < particles.size(); i++) {
+        // zero out forces
+        particles[i]->force = glm::vec3(0);
+        //gravity
         particles[i]->force += gravity;
-    }
-
-    // apply drag force
-    for(int i = 0; i < particles.size(); i++) {
-        // drag calculation based on spherical/cubic particles
+        //drag
+        drag = 0.5f * air_density * DRAG_COFF * particle_radius * particle_radius * glm::length(particles[i]->velocity) * glm::length(particles[i]->velocity) * (-1.0f * glm::normalize(particles[i]->velocity));
+        particles[i]->force += drag;
     }
     
     // Integrate motion
