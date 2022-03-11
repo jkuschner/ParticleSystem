@@ -11,62 +11,34 @@ void Spawner::addParticle() {
     GLuint randLife;
 
     float lo = initPosition.x - positionVar.x / 2;
-    std::cout << "print1" << std::endl;
     float hi = initPosition.x + positionVar.x / 2;
-    std::cout << "print2" << std::endl;
     
    // srand(time(0));
-    //randPos.x = fmod(double(rand()), double(positionVar.x)) + initPosition.x - (positionVar.x / 2);
     randPos.x = lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo)));
-    std::cout << "print3" << std::endl;
 
     lo = initPosition.y - positionVar.y / 2;
-    std::cout << "print4" << std::endl;
     hi = initPosition.y + positionVar.y / 2;
-    std::cout << "print5" << std::endl;
-//    randPos.y = fmod(double(rand()), double(positionVar.y)) + initPosition.y - (positionVar.y / 2);
     randPos.y = lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo)));
-    std::cout << "print6" << std::endl;
 
     lo = initPosition.z - positionVar.z / 2;
-    std::cout << "print7" << std::endl;
     hi = initPosition.z + positionVar.z / 2;
-    std::cout << "print8" << std::endl;
-//    randPos.z = fmod(double(rand()), double(positionVar.z)) + initPosition.z - (positionVar.z / 2);
     randPos.z = lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo)));
-    std::cout << "print9" << std::endl;
 
     lo = initVelocity.x - velocityVar.x / 2;
-    std::cout << "print10" << std::endl;
     hi = initVelocity.x + velocityVar.x / 2;
-    std::cout << "print11" << std::endl;
-//    randVel.x = fmod(double(rand()), double(velocityVar.x)) + initVelocity.x - (velocityVar.x / 2);
     randVel.x = lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo)));
 
-    std::cout << "print12" << std::endl;
     lo = initVelocity.y - velocityVar.y / 2;
-    std::cout << "print13" << std::endl;
     hi = initVelocity.y + velocityVar.y / 2;
-    std::cout << "print14" << std::endl;
-//    randVel.y = fmod(double(rand()), double(velocityVar.y)) + initVelocity.y - (velocityVar.y / 2);
     randVel.y = lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo)));
-    std::cout << "print15" << std::endl;
 
     lo = initVelocity.z - velocityVar.z / 2;
-    std::cout << "print16" << std::endl;
     hi = initVelocity.z + velocityVar.z / 2;
-    std::cout << "print17" << std::endl;
-    //randVel.z = fmod(double(rand()), double(velocityVar.z)) + initVelocity.z - (velocityVar.z / 2);
     randVel.z = lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo)));
-    std::cout << "print18" << std::endl;
 
     lo = initLifespan - lifespanVar / 2;
-    std::cout << "print19" << std::endl;
     hi = initLifespan + lifespanVar / 2;
-    std::cout << "print20" << std::endl;
-    //randLife = int(fmod(double(rand()), double(lifespanVar)) + initLifespan - (lifespanVar / 2));
     randLife = int(lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo))));
-    std::cout << "print21" << std::endl;
 
     Particle* p = new Particle(randPos, randVel, MASS, randLife, particlesCreated);
     particles.push_back(p);
