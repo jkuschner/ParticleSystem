@@ -15,8 +15,8 @@
 #include "imgui_impl_glut.h"
 #include "imgui_impl_opengl3.h"
 
-const int width = 800;
-const int height = 600;
+const int width = 1200;
+const int height = 900;
 
 bool actPan = false, actPitchYaw = false, actZoom = false;
 int mouseX = 0, mouseY = 0;
@@ -38,7 +38,6 @@ GLuint iLifespan;
 float vLifespan;
 float air, drag, particle_size, rest, fric;
 
-static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 void initialize() {
     glClearColor(0.0f, 0.0f, 0.0f, 1);
@@ -79,24 +78,31 @@ void display_callback() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     scene->drawGrid(shaders["Grid"]);
 
-    /*
+    
     // set up and render ImGui window
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGLUT_NewFrame();
 
     //display code
+    
     ImGui::Begin("System Parameters");
-    ImGui::Text("text text hello");
+    ImGui::SliderFloat("iPosx", &iPos_x, -10.0f, 10.0f);
+    ImGui::SliderFloat("iPosy", &iPos_y, 0.0f, 10.0f);
+    ImGui::SliderFloat("iPosz", &iPos_z, -10.0f, 10.0f);
+    ImGui::SliderFloat("vPosx", &vPos_x, 0.0f, 10.0f);
+    ImGui::SliderFloat("vPosy", &vPos_y, 0.0f, 10.0f);
+    ImGui::SliderFloat("vPosz", &vPos_z, 0.0f, 10.0f);
     ImGui::End();
+    
 
     // Rendering
     ImGui::Render();
-    ImGuiIO& io = ImGui::GetIO();
-    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
-    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
+    //ImGuiIO& io = ImGui::GetIO();
+    //glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
+    //glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+    //glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    */
+    
 
     glutSwapBuffers();
 }
@@ -147,6 +153,8 @@ void handle_keypress(unsigned char key, int x, int y) {
 
 /// Mouse button callback
 void handle_mouse_click(int button, int state, int x, int y) {
+    ImGui_ImplGLUT_MouseFunc(button, state, x, y);
+
     GLuint mod = glutGetModifiers();
     switch (button) {
         case GLUT_LEFT_BUTTON:
@@ -162,9 +170,9 @@ void handle_mouse_click(int button, int state, int x, int y) {
     mouseX = x; mouseY = y;
 }
 
-
 /// Called when the mouse is moving with at least one button pressed
 void handle_mouse_drag(int x, int y) {
+    ImGui_ImplGLUT_MotionFunc(x, y);
     const int dmax = 100;
     const int dx = glm::clamp(x - mouseX, -dmax, dmax);
     const int dy = glm::clamp(y - mouseY, -dmax, dmax);
@@ -209,14 +217,27 @@ int main(int argc, char * argv[]) {
 
     /// see link: https://www.opengl.org/resources/libraries/glut/spec3/node46.html
     glutDisplayFunc(display_callback);
-    //ImGui stuff goes here
-
     glutIdleFunc(idle_callback);
+    //ImGui stuff goes here
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGLUT_Init();
+    ImGui_ImplGLUT_InstallFuncs();
+    ImGui_ImplOpenGL3_Init();
+
     glutKeyboardFunc(handle_keypress);
     glutMouseFunc(handle_mouse_click);
+
     glutMotionFunc(handle_mouse_drag);
     glutMainLoop();
 
+    //ImGui Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGLUT_Shutdown();
+    ImGui::DestroyContext();
     cleanup();
     return 0;
 }
