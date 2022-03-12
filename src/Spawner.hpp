@@ -37,7 +37,6 @@ struct Particle {
     public:
         glm::vec3 acceleration() { return (1 / mass) * force; }
         glm::vec3 momentum()     { return mass * velocity; }
-        //void applyForce(glm::vec3 &f) { force += f;}
 
         Particle(glm::vec3 pos, glm::vec3 v, float m, int life, ull id, float size) {
             position = pos;
@@ -52,13 +51,6 @@ struct Particle {
 
 
         void updatePosition(float timestep) {
-            /*
-            glm::vec3 position_new = 2.0f * position - position_prev;
-            position_new += acceleration() * timestep * timestep;
-            position_prev = position;
-            position = position_new;
-            */
-
             // Euler integration
             velocity += acceleration() * timestep;
             position_prev = position;
@@ -127,7 +119,7 @@ public:
                           float vvelx, float vvely, float vvelz,
                           float gravi, float creat, int ilife,
                           float vlife, float air_d, float dragc,
-                          float psize, float bounc, float frict);
+                          float bounc, float frict);
 
     Spawner();
 };

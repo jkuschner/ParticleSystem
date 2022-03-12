@@ -13,7 +13,6 @@ void Spawner::addParticle() {
     float lo = initPosition.x - positionVar.x / 2;
     float hi = initPosition.x + positionVar.x / 2;
     
-   // srand(time(0));
     randPos.x = lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo)));
 
     lo = initPosition.y - positionVar.y / 2;
@@ -47,9 +46,6 @@ void Spawner::addParticle() {
     Particle* p = new Particle(randPos, randVel, MASS, randLife, particlesCreated, particle_radius);
     particles.push_back(p);
     particlesCreated++;
-
-    std::cout << "Position x: " << randPos.x << "\nPosition y: " << randPos.y << "Position z:" << randPos.z << std::endl;
-    std::cout << "Velocity x: " << randVel.x << "\nVelocity y: " << randVel.y << "Velocity z:" << randVel.z << std::endl;
 }
 
 void Spawner::update() {
@@ -130,7 +126,7 @@ void Spawner::changeParameters(float iposx, float iposy, float iposz,
                           float vvelx, float vvely, float vvelz,
                           float gravi, float creat, int ilife,
                           float vlife, float air_d, float dragc,
-                          float psize, float bounc, float frict) {
+                          float bounc, float frict) {
     initPosition.x = iposx;
     initPosition.y = iposy;
     initPosition.z = iposz;
@@ -151,7 +147,6 @@ void Spawner::changeParameters(float iposx, float iposy, float iposz,
     lifespanVar = vlife;
     air_density = air_d;
     drag_coff = dragc;
-    particle_radius = psize;
     restitution = bounc;
     friction_coff = frict;
 }

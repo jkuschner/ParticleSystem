@@ -36,7 +36,7 @@ float grav;
 float spawnRate;
 int iLifespan;
 float vLifespan;
-float air, drag, particle_size, rest, fric;
+float air, drag, rest, fric;
 
 
 void initialize() {
@@ -66,7 +66,6 @@ void initialize() {
     vLifespan = 10.0f;
     air = AIR_DENSITY;
     drag = DRAG_COFF;
-    particle_size = 0.1f;
     rest = RESTITUTION;
     fric = FRICTION_COFF;
 }
@@ -116,7 +115,6 @@ void display_callback() {
     ImGui::SliderFloat("lifetime variance", &vLifespan, 0.0f, 100.0f);
     ImGui::SliderFloat("air density", &air, 0.0f, 5.0f);
     ImGui::SliderFloat("drag coeficcient", &drag, 0.0f, 5.0f);
-    ImGui::SliderFloat("particle size", &particle_size, 0.0f, 1.0f);
     ImGui::SliderFloat("restitution(bounciness)", &rest, 0.0f, 1.0f);
     ImGui::SliderFloat("friction coeficcient", &fric, 0.0f, 1.0f);
     ImGui::End();
@@ -140,7 +138,7 @@ void idle_callback() {
     // MARK: Perform any background tasks here
     // CALL glutPostRedisplay() if the work changes what's displayed on screen
     spawner->update();
-    spawner->changeParameters(iPos_x, iPos_y, iPos_z, vPos_x, vPos_y, vPos_z, iVel_x, iVel_y, iVel_z, vVel_x, vVel_y, vVel_z, grav, spawnRate, iLifespan, vLifespan, air, drag, particle_size, rest, fric);
+    spawner->changeParameters(iPos_x, iPos_y, iPos_z, vPos_x, vPos_y, vPos_z, iVel_x, iVel_y, iVel_z, vVel_x, vVel_y, vVel_z, grav, spawnRate, iLifespan, vLifespan, air, drag, rest, fric);
     scene->objects.clear();
 
     for (Cube* cube : spawner->sprites()) {
