@@ -30,7 +30,7 @@ struct Particle {
     glm::vec3 velocity;
     glm::vec3 force;
     float     mass;
-    GLuint lifetime;
+    int lifetime;
     Cube* sprite;
     ull particleID;
 
@@ -39,7 +39,7 @@ struct Particle {
         glm::vec3 momentum()     { return mass * velocity; }
         //void applyForce(glm::vec3 &f) { force += f;}
 
-        Particle(glm::vec3 pos, glm::vec3 v, float m, GLuint life, ull id) {
+        Particle(glm::vec3 pos, glm::vec3 v, float m, int life, ull id) {
             position = pos;
             position_prev = pos;
             velocity = v;
@@ -109,7 +109,7 @@ public:
     glm::vec3 velocityVar;
     glm::vec3 gravity;
     float creationRate; // particles per second
-    GLuint initLifespan;
+    int initLifespan;
     float lifespanVar;
     float roundOff;
     float air_density;
@@ -125,7 +125,7 @@ public:
                           float vposx, float vposy, float vposz,
                           float ivelx, float ively, float ivelz,
                           float vvelx, float vvely, float vvelz,
-                          float gravi, float creat, GLuint ilife,
+                          float gravi, float creat, int ilife,
                           float vlife, float air_d, float dragc,
                           float psize, float bounc, float frict);
 

@@ -128,7 +128,7 @@ void Spawner::changeParameters(float iposx, float iposy, float iposz,
                           float vposx, float vposy, float vposz,
                           float ivelx, float ively, float ivelz,
                           float vvelx, float vvely, float vvelz,
-                          float gravi, float creat, GLuint ilife,
+                          float gravi, float creat, int ilife,
                           float vlife, float air_d, float dragc,
                           float psize, float bounc, float frict) {
     initPosition.x = iposx;
