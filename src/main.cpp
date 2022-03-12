@@ -117,7 +117,7 @@ void display_callback() {
     ImGui::SliderFloat("air density", &air, 0.0f, 5.0f);
     ImGui::SliderFloat("drag coeficcient", &drag, 0.0f, 5.0f);
     ImGui::SliderFloat("particle size", &particle_size, 0.0f, 1.0f);
-    ImGui::SliderFloat("restitution(bounciness)", &particle_size, 0.0f, 1.0f);
+    ImGui::SliderFloat("restitution(bounciness)", &rest, 0.0f, 1.0f);
     ImGui::SliderFloat("friction coeficcient", &fric, 0.0f, 1.0f);
     ImGui::End();
     

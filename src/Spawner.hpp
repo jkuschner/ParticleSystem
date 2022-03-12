@@ -39,7 +39,7 @@ struct Particle {
         glm::vec3 momentum()     { return mass * velocity; }
         //void applyForce(glm::vec3 &f) { force += f;}
 
-        Particle(glm::vec3 pos, glm::vec3 v, float m, int life, ull id) {
+        Particle(glm::vec3 pos, glm::vec3 v, float m, int life, ull id, float size) {
             position = pos;
             position_prev = pos;
             velocity = v;
@@ -47,7 +47,7 @@ struct Particle {
             mass = m;
             lifetime = life;
             particleID = id;
-            sprite = new Cube(std::to_string(id), pos, pos + glm::vec3(CUBE_SIZE));
+            sprite = new Cube(std::to_string(id), pos, pos + glm::vec3(size));
         }
 
 

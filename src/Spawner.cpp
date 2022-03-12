@@ -44,7 +44,7 @@ void Spawner::addParticle() {
     hi = initLifespan + lifespanVar / 2;
     randLife = int(lo + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (hi - lo))));
 
-    Particle* p = new Particle(randPos, randVel, MASS, randLife, particlesCreated);
+    Particle* p = new Particle(randPos, randVel, MASS, randLife, particlesCreated, particle_radius);
     particles.push_back(p);
     particlesCreated++;
 
