@@ -102,7 +102,7 @@ Spawner::Spawner() {
     initVelocity = glm::vec3(0.0f, 20.0f, 0.0f);
     velocityVar = glm::vec3(1.5f, 5.0f, 1.5f);
     gravity = glm::vec3(0.0f, -5.8f, 0.0f);
-    creationRate = 10;
+    creationRate = 10.0f;
     initLifespan = 200;
     lifespanVar = 10.0f;
     roundOff = 0.0f;
@@ -122,4 +122,36 @@ std::vector<Cube*> Spawner::sprites() {
     }
     
     return sprites;
+}
+
+void Spawner::changeParameters(float iposx, float iposy, float iposz,
+                          float vposx, float vposy, float vposz,
+                          float ivelx, float ively, float ivelz,
+                          float vvelx, float vvely, float vvelz,
+                          float gravi, float creat, GLuint ilife,
+                          float vlife, float air_d, float dragc,
+                          float psize, float bounc, float frict) {
+    initPosition.x = iposx;
+    initPosition.y = iposy;
+    initPosition.z = iposz;
+    positionVar.x = vposx;
+    positionVar.y = vposy;
+    positionVar.z = vposz;
+
+    initVelocity.x = ivelx;
+    initVelocity.y = ively;
+    initVelocity.z = ivelz;
+    velocityVar.x = vvelx;
+    velocityVar.y = vvely;
+    velocityVar.z = vvelz;
+
+    gravity.y = gravi;
+    creationRate = creat;
+    initLifespan = ilife;
+    lifespanVar = vlife;
+    air_density = air_d;
+    drag_coff = dragc;
+    particle_radius = psize;
+    restitution = bounc;
+    friction_coff = frict;
 }

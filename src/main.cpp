@@ -86,12 +86,27 @@ void display_callback() {
     //display code
     
     ImGui::Begin("System Parameters");
-    ImGui::SliderFloat("iPosx", &iPos_x, -10.0f, 10.0f);
-    ImGui::SliderFloat("iPosy", &iPos_y, 0.0f, 10.0f);
-    ImGui::SliderFloat("iPosz", &iPos_z, -10.0f, 10.0f);
-    ImGui::SliderFloat("vPosx", &vPos_x, 0.0f, 10.0f);
-    ImGui::SliderFloat("vPosy", &vPos_y, 0.0f, 10.0f);
-    ImGui::SliderFloat("vPosz", &vPos_z, 0.0f, 10.0f);
+    ImGui::SliderFloat("spawn point x", &iPos_x, -10.0f, 10.0f);
+    ImGui::SliderFloat("spawn point y", &iPos_y, 0.0f, 10.0f);
+    ImGui::SliderFloat("spawn point z", &iPos_z, -10.0f, 10.0f);
+    ImGui::SliderFloat("spawn variance x", &vPos_x, 0.0f, 10.0f);
+    ImGui::SliderFloat("spawn variance y", &vPos_y, 0.0f, 10.0f);
+    ImGui::SliderFloat("spawn variance z", &vPos_z, 0.0f, 10.0f);
+    ImGui::SliderFloat("init velocity x", &iVel_x, -20.0f, 20.0f);
+    ImGui::SliderFloat("init velocity y", &iVel_y, -20.0f, 20.0f);
+    ImGui::SliderFloat("init velocity z", &iVel_z, -20.0f, 20.0f);
+    ImGui::SliderFloat("velocity variance x", &vVel_x, 0.0f, 20.0f);
+    ImGui::SliderFloat("velocity variance y", &vVel_y, 0.0f, 20.0f);
+    ImGui::SliderFloat("velocity variance z", &vVel_z, 0.0f, 20.0f);
+    ImGui::SliderFloat("gravity", &grav, 0.0f, 20.0f);
+    ImGui::SliderFloat("spawn rate", &spawnRate, 0.0f, 1000.0f);
+    ImGui::SliderInt("lifetime", &iLifespan, 0, 100);
+    ImGui::SliderFloat("lifetime variance", &vLifespan, 0.0f, 100.0f);
+    ImGui::SliderFloat("air density", &air, 0.0f, 5.0f);
+    ImGui::SliderFloat("drag coeficcient", &drag, 0.0f, 5.0f);
+    ImGui::SliderFloat("particle size", &particle_size, 0.0f, 5.0f);
+    ImGui::SliderFloat("restitution(bounciness)", &particle_size, 0.0f, 3.0f);
+    ImGui::SliderFloat("friction coeficcient", &fric, 0.0f, 1.0f);
     ImGui::End();
     
 
@@ -113,6 +128,7 @@ void idle_callback() {
     // MARK: Perform any background tasks here
     // CALL glutPostRedisplay() if the work changes what's displayed on screen
     spawner->update();
+    spawner->changeParameters(iPos_x, iPos_y, iPos_z, vPos_x, vPos_y, vPos_z, iVel_x, iVel_y, iVel_z, vVel_x, vVel_y, vVel_z, grav, spawnRate, iLifespan, vLifespan, air, drag, particle_size, rest, fric);
     scene->objects.clear();
 
     for (Cube* cube : spawner->sprites()) {
