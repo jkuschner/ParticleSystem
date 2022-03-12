@@ -34,7 +34,7 @@ float iVel_x, iVel_y, iVel_z;
 float vVel_x, vVel_y, vVel_z;
 float grav;
 float spawnRate;
-GLuint iLifespan;
+int iLifespan;
 float vLifespan;
 float air, drag, particle_size, rest, fric;
 
@@ -56,7 +56,19 @@ void initialize() {
     scene = new Scene("Scene");
     spawner = new Spawner();
 
-
+    iPos_x = 0.0f; iPos_y = 0.0f; iPos_z = 0.0f;
+    vPos_x = 2.0f; vPos_y = 2.0f; vPos_z = 2.0f;
+    iVel_x = 0.0f; iVel_y = 20.0f; iVel_z = 0.0f;
+    vVel_x = 1.5f; vVel_y = 5.0f; vVel_z = 1.5f;
+    grav = -6.5f;
+    spawnRate = 10.0f;
+    iLifespan = 100;
+    vLifespan = 10.0f;
+    air = AIR_DENSITY;
+    drag = DRAG_COFF;
+    particle_size = 0.1f;
+    rest = RESTITUTION;
+    fric = FRICTION_COFF;
 }
 
 
@@ -98,14 +110,14 @@ void display_callback() {
     ImGui::SliderFloat("velocity variance x", &vVel_x, 0.0f, 20.0f);
     ImGui::SliderFloat("velocity variance y", &vVel_y, 0.0f, 20.0f);
     ImGui::SliderFloat("velocity variance z", &vVel_z, 0.0f, 20.0f);
-    ImGui::SliderFloat("gravity", &grav, 0.0f, 20.0f);
-    ImGui::SliderFloat("spawn rate", &spawnRate, 0.0f, 1000.0f);
+    ImGui::SliderFloat("gravity", &grav, -20.0f, 20.0f);
+    ImGui::SliderFloat("spawn rate", &spawnRate, 0.0f, 100.0f);
     ImGui::SliderInt("lifetime", &iLifespan, 0, 100);
     ImGui::SliderFloat("lifetime variance", &vLifespan, 0.0f, 100.0f);
     ImGui::SliderFloat("air density", &air, 0.0f, 5.0f);
     ImGui::SliderFloat("drag coeficcient", &drag, 0.0f, 5.0f);
-    ImGui::SliderFloat("particle size", &particle_size, 0.0f, 5.0f);
-    ImGui::SliderFloat("restitution(bounciness)", &particle_size, 0.0f, 3.0f);
+    ImGui::SliderFloat("particle size", &particle_size, 0.0f, 1.0f);
+    ImGui::SliderFloat("restitution(bounciness)", &particle_size, 0.0f, 1.0f);
     ImGui::SliderFloat("friction coeficcient", &fric, 0.0f, 1.0f);
     ImGui::End();
     
