@@ -108,7 +108,7 @@ public:
     glm::vec3 initVelocity;
     glm::vec3 velocityVar;
     glm::vec3 gravity;
-    GLuint creationRate; // particles per second
+    float creationRate; // particles per second
     GLuint initLifespan;
     float lifespanVar;
     float roundOff;
@@ -121,6 +121,13 @@ public:
     void addParticle();
     void update();
     std::vector<Cube*> sprites();
+    void changeParameters(float iposx, float iposy, float iposz,
+                          float vposx, float vposy, float vposz,
+                          float ivelx, float ively, float ivelz,
+                          float vvelx, float vvely, float vvelz,
+                          float gravi, float creat, GLuint ilife,
+                          float vlife, float air_d, float dragc,
+                          float psize, float bounc, float frict);
 
     Spawner();
 };
